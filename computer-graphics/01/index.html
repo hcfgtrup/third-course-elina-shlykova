@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Алгоритм ЦДА</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        canvas { border: 1px solid #ccc; background-color: #f9f9f9; margin-top: 20px; }
+        .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        input { width: 60px; padding: 5px; }
+        button { padding: 5px 15px; cursor: pointer; }
+        table { margin-top: 20px; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Алгоритм ЦДА</h1>
+    
+    <div class="controls">
+        <label>x1: <input type="number" id="x1" value="2"></label>
+        <label>y1: <input type="number" id="y1" value="2"></label>
+        <label>x2: <input type="number" id="x2" value="20"></label>
+        <label>y2: <input type="number" id="y2" value="8"></label>
+        <button id="drawBtn">Построить</button>
+    </div>
+
+    <!-- Canvas размером 40x30 логических пикселей, масштаб 15 => 600x450 экранных пикселей -->
+    <canvas id="canvas" width="600" height="450"></canvas>
+
+    <h3>Таблица шагов</h3>
+    <table id="stepsTable">
+        <thead>
+            <tr>
+                <th>шаг</th>
+                <th>x до округления</th>
+                <th>y до округления</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const scale = 15;
+
+        function putPixel(x, y, color = 'black') {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * scale, y * scale, scale, scale);
+        }
+
+        function lineDDA(x1, y1, x2, y2) {
+            const stepsTableBody = document.querySelector('#stepsTable tbody');
+            stepsTableBody.innerHTML = '';
+
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const steps = Math.max(Math.abs(dx), Math.abs(dy));
+
+            if (steps === 0) {
+                putPixel(x1, y1);
+                return;
+            }
+
+            const xStep = dx / steps;
+            const yStep = dy / steps;
+
+            let x = x1;
+            let y = y1;
+
+            for (let i = 0; i <= steps; i++) {
+                const roundedX = Math.round(x);
+                const roundedY = Math.round(y);
+                
+                putPixel(roundedX, roundedY);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${i}</td><td>${x.toFixed(2)}</td><td>${y.toFixed(2)}</td>`;
+                stepsTableBody.appendChild(row);
+
+                x += xStep;
+                y += yStep;
+            }
+        }
+
+        document.getElementById('drawBtn').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const x1 = parseInt(document.getElementById('x1').value);
+            const y1 = parseInt(document.getElementById('y1').value);
+            const x2 = parseInt(document.getElementById('x2').value);
+            const y2 = parseInt(document.getElementById('y2').value);
+            
+            lineDDA(x1, y1, x2, y2);
+        });
+
+        document.getElementById('drawBtn').click();
+    </script>
+</body>
+</html>
