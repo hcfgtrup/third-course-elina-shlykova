@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Алгоритм Брезенхема</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        canvas { border: 1px solid #ccc; background-color: #f9f9f9; margin-top: 20px; }
+        .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; justify-content: center; }
+        input { width: 60px; padding: 5px; }
+        button { padding: 5px 15px; cursor: pointer; }
+        table { margin-top: 20px; border-collapse: collapse; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 5px 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .pixel-list { margin-top: 20px; background: #eee; padding: 10px; border-radius: 5px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Алгоритм Брезенхема</h1>
+    
+    <div class="controls">
+        <label>x1: <input type="number" id="x1" value="2"></label>
+        <label>y1: <input type="number" id="y1" value="2"></label>
+        <label>x2: <input type="number" id="x2" value="20"></label>
+        <label>y2: <input type="number" id="y2" value="8"></label>
+        <button id="drawBtn">Построить</button>
+    </div>
+
+    <canvas id="canvas" width="600" height="450"></canvas>
+
+    <!-- Список пикселей -->
+    <div class="pixel-list" id="pixelList"></div>
+
+    <!-- Таблица шагов -->
+    <h3>Таблица работы Брезенхема</h3>
+    <table id="stepsTable">
+        <thead>
+            <tr>
+                <th>шаг</th>
+                <th>x</th>
+                <th>y</th>
+                <th>error</th>
+                <th>error2</th>
+                <th>изменение</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const scale = 15;
+
+        function putPixel(x, y, color = 'black') {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * scale, y * scale, scale, scale);
+        }
+
+        function lineBresenham(x1, y1, x2, y2) {
+            const stepsTableBody = document.querySelector('#stepsTable tbody');
+            stepsTableBody.innerHTML = '';
+            
+            const pixelList = document.getElementById('pixelList');
+            pixelList.innerHTML = '';
+
+            const dx = Math.abs(x2 - x1);
+            const dy = Math.abs(y2 - y1);
+            
+            const sx = x1 < x2 ? 1 : -1;
+            const sy = y1 < y2 ? 1 : -1;
+
+            let error = dx - dy;
+
+            let x = x1;
+            let y = y1;
+
+            let stepCount = 0;
+
+            while (true) {
+                putPixel(x, y);
+                
+                pixelList.innerHTML += `(${x}, ${y}) `;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stepCount}</td>
+                    <td>${x}</td>
+                    <td>${y}</td>
+                    <td>${error}</td>
+                    <td>-</td>
+                    <td>-</td>
+                `;
+                stepsTableBody.appendChild(row);
+
+                if (x === x2 && y === y2) break;
+
+                const error2 = 2 * error;
+                
+                const lastRow = stepsTableBody.lastChild;
+                lastRow.cells[4].textContent = error2;
+
+                let changed = '';
+                if (error2 > -dy) {
+                    error -= dy;
+                    x += sx;
+                    changed += 'x ';
+                }
+                if (error2 < dx) {
+                    error += dx;
+                    y += sy;
+                    changed += 'y';
+                }
+                
+                lastRow.cells[5].textContent = changed;
+
+                stepCount++;
+            }
+        }
+
+        document.getElementById('drawBtn').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const x1 = parseInt(document.getElementById('x1').value);
+            const y1 = parseInt(document.getElementById('y1').value);
+            const x2 = parseInt(document.getElementById('x2').value);
+            const y2 = parseInt(document.getElementById('y2').value);
+            
+            lineBresenham(x1, y1, x2, y2);
+        });
+
+        document.getElementById('drawBtn').click();
+    </script>
+</body>
+</html>
