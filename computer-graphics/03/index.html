@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Окружность по пикселям</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        canvas { border: 1px solid #ccc; background-color: #f9f9f9; margin-top: 20px; }
+        .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; justify-content: center; }
+        input { width: 70px; padding: 5px; }
+        button { padding: 5px 15px; cursor: pointer; }
+        table { margin-top: 20px; border-collapse: collapse; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 5px 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        label { display: flex; align-items: center; gap: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Окружность по пикселям</h1>
+
+    <div class="controls">
+        <label>cx: <input type="number" id="cx" value="20"></label>
+        <label>cy: <input type="number" id="cy" value="15"></label>
+        <label>r: <input type="number" id="r" value="10"></label>
+        <button id="drawBtn">Построить</button>
+        <label><input type="checkbox" id="highlightMode"> Выделять точки одного шага</label>
+    </div>
+
+    <canvas id="canvas" width="600" height="450"></canvas>
+
+    <h3>Таблица шагов</h3>
+    <table id="stepsTable">
+        <thead>
+            <tr>
+                <th>шаг</th>
+                <th>x</th>
+                <th>y</th>
+                <th>d до шага</th>
+                <th>выбранный вариант</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const scale = 15;
+
+        function putPixel(x, y, color = 'black') {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * scale, y * scale, scale, scale);
+        }
+
+        function plot8(cx, cy, x, y, highlight = false) {
+            const color = highlight ? 'red' : 'black';
+            putPixel(cx + x, cy + y, color);
+            putPixel(cx + y, cy + x, color);
+            putPixel(cx - x, cy + y, color);
+            putPixel(cx - y, cy + x, color);
+            putPixel(cx + x, cy - y, color);
+            putPixel(cx + y, cy - x, color);
+            putPixel(cx - x, cy - y, color);
+            putPixel(cx - y, cy - x, color);
+        }
+
+        function circleMidpoint(cx, cy, r, highlightMode = false) {
+            const stepsTableBody = document.querySelector('#stepsTable tbody');
+            stepsTableBody.innerHTML = '';
+
+            let x = 0;
+            let y = r;
+            let d = 1 - r;
+            let step = 0;
+
+            while (x <= y) {
+                plot8(cx, cy, x, y, highlightMode && step === 0);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${step}</td>
+                    <td>${x}</td>
+                    <td>${y}</td>
+                    <td>${d}</td>
+                    <td>${d < 0 ? 'E' : 'SE'}</td>
+                `;
+                stepsTableBody.appendChild(row);
+
+                if (d < 0) {
+                    d += 2 * x + 3;
+                } else {
+                    d += 2 * (x - y) + 5;
+                    y -= 1;
+                }
+                x += 1;
+                step++;
+            }
+        }
+
+        function circleFormula(cx, cy, r) {
+            for (let x = 0; x <= r; x++) {
+                const y = Math.round(Math.sqrt(r * r - x * x));
+                plot8(cx, cy, x, y);
+            }
+        }
+
+        document.getElementById('drawBtn').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = parseInt(document.getElementById('cx').value);
+            const cy = parseInt(document.getElementById('cy').value);
+            const r = parseInt(document.getElementById('r').value);
+            const highlightMode = document.getElementById('highlightMode').checked;
+
+            if (r <= 0) {
+                alert('Радиус должен быть больше нуля');
+                return;
+            }
+
+            circleMidpoint(cx, cy, r, highlightMode);
+        });
+
+        document.getElementById('drawBtn').click();
+    </script>
+</body>
+</html>
