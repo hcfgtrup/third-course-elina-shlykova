@@ -1,0 +1,141 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+h1, h2 {
+  margin-top: 0;
+}
+
+.form-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, textarea, button {
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+input, textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #222;
+  border-radius: 4px;
+  background: #222;
+  color: #fff;
+  transition: background 0.2s, color 0.2s;
+}
+
+button:hover {
+  background: #fff;
+  color: #222;
+}
+
+button:disabled {
+  background: #eee;
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+#cancelButton {
+  background: #fff;
+  color: #222;
+  border: 1px solid #222;
+}
+
+#cancelButton:hover {
+  background: #222;
+  color: #fff;
+}
+
+.hidden {
+  display: none;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.controls input {
+  flex: 1;
+  min-width: 250px;
+}
+
+.info {
+  margin-bottom: 20px;
+}
+
+.posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.post-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.post-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.post-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.post-card .card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.post-card .card-actions button {
+  font-size: 14px;
+  padding: 6px 10px;
+}
