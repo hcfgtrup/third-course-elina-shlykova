@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ЛР 4 — Отсечение (Коэн-Сазерленд)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Отсечение отрезков (Коэн-Сазерленд)</h1>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>Окно отсечения</h2>
+        <div class="form-row">
+          <label>xmin: <input type="number" id="xmin" value="10"></label>
+          <label>xmax: <input type="number" id="xmax" value="30"></label>
+        </div>
+        <div class="form-row">
+          <label>ymin: <input type="number" id="ymin" value="10"></label>
+          <label>ymax: <input type="number" id="ymax" value="20"></label>
+        </div>
+
+        <h2>Отрезок</h2>
+        <div class="form-row">
+          <label>x1: <input type="number" id="x1" value="2"></label>
+          <label>y1: <input type="number" id="y1" value="5"></label>
+        </div>
+        <div class="form-row">
+          <label>x2: <input type="number" id="x2" value="36"></label>
+          <label>y2: <input type="number" id="y2" value="22"></label>
+        </div>
+
+        <div class="buttons">
+          <button id="drawBtn">Построить</button>
+          <button id="polylineBtn">Ломаная</button>
+          <button id="randomBtn">Случайные</button>
+        </div>
+
+        <h2>Результат</h2>
+        <div id="status" class="info"></div>
+        <div id="codes" class="info"></div>
+      </section>
+
+      <section class="canvas-wrapper">
+        <canvas id="canvas" width="600" height="450"></canvas>
+      </section>
+    </div>
+
+    <section class="table-section">
+      <h2>Таблица итераций</h2>
+      <table id="stepsTable">
+        <thead>
+          <tr>
+            <th>шаг</th>
+            <th>A (x1, y1)</th>
+            <th>codeA</th>
+            <th>B (x2, y2)</th>
+            <th>codeB</th>
+            <th>действие</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
