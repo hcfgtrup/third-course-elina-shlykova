@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ЛР 6 — Отсечение многоугольника</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Отсечение многоугольника (Сазерленд-Ходжман)</h1>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>Окно отсечения</h2>
+        <div class="form-row">
+          <label>xmin: <input type="number" id="xmin" value="10"></label>
+          <label>xmax: <input type="number" id="xmax" value="30"></label>
+        </div>
+        <div class="form-row">
+          <label>ymin: <input type="number" id="ymin" value="10"></label>
+          <label>ymax: <input type="number" id="ymax" value="20"></label>
+        </div>
+
+        <h2>Визуализация</h2>
+        <div class="form-row">
+          <label>Этап:
+            <select id="stageSelect">
+              <option value="original">Исходный</option>
+              <option value="left">После LEFT</option>
+              <option value="right">После RIGHT</option>
+              <option value="top">После TOP</option>
+              <option value="bottom">После BOTTOM</option>
+            </select>
+          </label>
+        </div>
+        <button id="drawBtn">Построить</button>
+      </section>
+
+      <section class="canvas-wrapper">
+        <canvas id="canvas" width="600" height="450"></canvas>
+      </section>
+    </div>
+
+    <section class="table-section">
+      <h2>Промежуточные результаты</h2>
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>Этап</th>
+            <th>Число вершин</th>
+            <th>Координаты</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
